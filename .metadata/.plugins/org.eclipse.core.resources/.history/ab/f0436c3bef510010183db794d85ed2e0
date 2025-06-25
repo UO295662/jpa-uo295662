@@ -1,0 +1,36 @@
+package uo.ri.cws.application.service.mechanic.crud.command;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import uo.ri.conf.Factories;
+import uo.ri.cws.application.repository.MechanicRepository;
+import uo.ri.cws.application.service.mechanic.MechanicCrudService.MechanicDto;
+import uo.ri.cws.application.util.command.Command;
+import uo.ri.cws.domain.Mechanic;
+import uo.ri.util.exception.BusinessException;
+
+public class FindMechanicsWith1WorkOrder implements Command<List<MechanicDto>> {
+
+    private MechanicRepository mechanicRepo = Factories.repository
+        .forMechanic();
+
+    /**
+     * @return the list of all mechanics without regarding their contract state
+     *         or if they have contract or not. It might be an empty list if
+     *         there is no mechanic.
+     *
+     * @throws BusinessException DOES NOT
+     */
+    @Override
+    public List<MechanicDto> execute() {
+        List<Mechanic> list = mechanicRepo.findAll();
+        List<Mechanic> result = new ArrayList<Mechanic>();
+        for(Mechanic m:list) {
+            if(m.getAssigned()!=null) {
+                result.add(m);
+            }
+        }
+    }
+
+}

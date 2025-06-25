@@ -1,0 +1,14 @@
+1750086858787	Delete element
+1750086915508	Move compilation units
+1750087461615	Move compilation unit
+1750087474916	Move compilation units
+1750087496684	Move compilation unit
+1750088742869	Rename type 'FindOrderByCode'
+1750088754706	Rename type 'FindOrderByProviderNif'
+1750100188640	Rename method 'comprobarWorkOrdersFinished'
+1750100293968	Rename method 'comprobaciones'
+1750100305891	Rename method 'crearInvoice'
+1750100310161	Rename method 'crateInvoice'
+1750435469664	Rename field 'newDto'
+1750435592991	Rename method 'comprobacionesUpdate'
+1750495937552	Rename method 'businessChecks'

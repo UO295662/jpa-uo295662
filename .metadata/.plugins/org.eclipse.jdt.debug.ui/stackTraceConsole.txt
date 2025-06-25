@@ -1,0 +1,109 @@
+java.lang.IllegalArgumentException: Exception [EclipseLink-6168] (Eclipse Persistence Services - 4.0.4.v202407190748-059428cdd2583c46f1f3e50d235854840a6fa9a7): org.eclipse.persistence.exceptions.QueryException
+Exception Description: Query failed to prepare, unexpected error occurred: [java.lang.ClassCastException: class java.lang.String cannot be cast to class java.lang.Enum (java.lang.String and java.lang.Enum are in module java.base of loader 'bootstrap')].
+Internal Exception: java.lang.ClassCastException: class java.lang.String cannot be cast to class java.lang.Enum (java.lang.String and java.lang.Enum are in module java.base of loader 'bootstrap')
+Query: ReadAllQuery(name="SparePart.findUnderStockNotPending" referenceClass=SparePart jpql="
+        SELECT sp
+        FROM SparePart sp
+        WHERE sp.stock < sp.minStock
+        AND sp.code NOT IN (
+            SELECT DISTINCT ol.sparePart.code
+            FROM Order o
+            JOIN o.orderLines ol
+            WHERE o.state = 'PENDING'
+        )
+    	")
+	at org.eclipse.persistence.internal.jpa.QueryImpl.getDatabaseQueryInternal(QueryImpl.java:349)
+	at org.eclipse.persistence.internal.jpa.EntityManagerImpl.createNamedQuery(EntityManagerImpl.java:1224)
+	at org.eclipse.persistence.internal.jpa.EntityManagerImpl.createNamedQuery(EntityManagerImpl.java:1245)
+	at uo.ri.cws.infrastructure.persistence.jpa.repository.SparePartJpaRepository.findUnderStockNotPending(SparePartJpaRepository.java:25)
+	at uo.ri.cws.application.service.spare.order.command.GenerateOrder.execute(GenerateOrder.java:30)
+	at uo.ri.cws.application.service.spare.order.command.GenerateOrder.execute(GenerateOrder.java:1)
+	at uo.ri.cws.infrastructure.persistence.jpa.executor.JpaCommandExecutor.execute(JpaCommandExecutor.java:20)
+	at uo.ri.cws.application.service.spare.order.OrdersServiceImpl.generateOrders(OrdersServiceImpl.java:18)
+	at uo.ri.cws.application.service.orders.GenerateSteps.newOrdersAreGenerated(GenerateSteps.java:70)
+	at ✽.new orders are generated(classpath:uo/ri/cws/application/service/orders/Generate.feature:13)
+Caused by: Exception [EclipseLink-6168] (Eclipse Persistence Services - 4.0.4.v202407190748-059428cdd2583c46f1f3e50d235854840a6fa9a7): org.eclipse.persistence.exceptions.QueryException
+Exception Description: Query failed to prepare, unexpected error occurred: [java.lang.ClassCastException: class java.lang.String cannot be cast to class java.lang.Enum (java.lang.String and java.lang.Enum are in module java.base of loader 'bootstrap')].
+Internal Exception: java.lang.ClassCastException: class java.lang.String cannot be cast to class java.lang.Enum (java.lang.String and java.lang.Enum are in module java.base of loader 'bootstrap')
+Query: ReadAllQuery(name="SparePart.findUnderStockNotPending" referenceClass=SparePart jpql="
+        SELECT sp
+        FROM SparePart sp
+        WHERE sp.stock < sp.minStock
+        AND sp.code NOT IN (
+            SELECT DISTINCT ol.sparePart.code
+            FROM Order o
+            JOIN o.orderLines ol
+            WHERE o.state = 'PENDING'
+        )
+    	")
+	at org.eclipse.persistence.exceptions.QueryException.prepareFailed(QueryException.java:1599)
+	at org.eclipse.persistence.queries.DatabaseQuery.checkPrepare(DatabaseQuery.java:694)
+	at org.eclipse.persistence.queries.ObjectLevelReadQuery.checkPrepare(ObjectLevelReadQuery.java:970)
+	at org.eclipse.persistence.queries.DatabaseQuery.checkPrepare(DatabaseQuery.java:624)
+	at org.eclipse.persistence.internal.jpa.QueryImpl.getDatabaseQueryInternal(QueryImpl.java:347)
+	at org.eclipse.persistence.internal.jpa.EntityManagerImpl.createNamedQuery(EntityManagerImpl.java:1224)
+	at org.eclipse.persistence.internal.jpa.EntityManagerImpl.createNamedQuery(EntityManagerImpl.java:1245)
+	at uo.ri.cws.infrastructure.persistence.jpa.repository.SparePartJpaRepository.findUnderStockNotPending(SparePartJpaRepository.java:25)
+	at uo.ri.cws.application.service.spare.order.command.GenerateOrder.execute(GenerateOrder.java:30)
+	at uo.ri.cws.application.service.spare.order.command.GenerateOrder.execute(GenerateOrder.java:1)
+	at uo.ri.cws.infrastructure.persistence.jpa.executor.JpaCommandExecutor.execute(JpaCommandExecutor.java:20)
+	at uo.ri.cws.application.service.spare.order.OrdersServiceImpl.generateOrders(OrdersServiceImpl.java:18)
+	at uo.ri.cws.application.service.orders.GenerateSteps.newOrdersAreGenerated(GenerateSteps.java:70)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at io.cucumber.java.Invoker.doInvoke(Invoker.java:66)
+	at io.cucumber.java.Invoker.invoke(Invoker.java:24)
+	at io.cucumber.java.AbstractGlueDefinition.invokeMethod(AbstractGlueDefinition.java:47)
+	at io.cucumber.java.JavaStepDefinition.execute(JavaStepDefinition.java:29)
+	at io.cucumber.core.runner.CoreStepDefinition.execute(CoreStepDefinition.java:66)
+	at io.cucumber.core.runner.PickleStepDefinitionMatch.runStep(PickleStepDefinitionMatch.java:63)
+	at io.cucumber.core.runner.ExecutionMode$1.execute(ExecutionMode.java:10)
+	at io.cucumber.core.runner.TestStep.executeStep(TestStep.java:81)
+	at io.cucumber.core.runner.TestStep.run(TestStep.java:53)
+	at io.cucumber.core.runner.PickleStepTestStep.run(PickleStepTestStep.java:51)
+	at io.cucumber.core.runner.TestCase.run(TestCase.java:84)
+	at io.cucumber.core.runner.Runner.runPickle(Runner.java:75)
+	at io.cucumber.junit.platform.engine.CucumberEngineExecutionContext.lambda$runTestCase$4(CucumberEngineExecutionContext.java:112)
+	at io.cucumber.core.runtime.CucumberExecutionContext.lambda$runTestCase$5(CucumberExecutionContext.java:136)
+	at io.cucumber.core.runtime.RethrowingThrowableCollector.executeAndThrow(RethrowingThrowableCollector.java:23)
+	at io.cucumber.core.runtime.CucumberExecutionContext.runTestCase(CucumberExecutionContext.java:136)
+	at io.cucumber.junit.platform.engine.CucumberEngineExecutionContext.runTestCase(CucumberEngineExecutionContext.java:109)
+	at io.cucumber.junit.platform.engine.NodeDescriptor$PickleDescriptor.execute(NodeDescriptor.java:168)
+	at io.cucumber.junit.platform.engine.NodeDescriptor$PickleDescriptor.execute(NodeDescriptor.java:90)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+Caused by: java.lang.ClassCastException: class java.lang.String cannot be cast to class java.lang.Enum (java.lang.String and java.lang.Enum are in module java.base of loader 'bootstrap')
+	at org.eclipse.persistence.mappings.converters.EnumTypeConverter.convertObjectValueToDataValue(EnumTypeConverter.java:164)
+	at org.eclipse.persistence.mappings.foundation.AbstractDirectMapping.getFieldValue(AbstractDirectMapping.java:790)
+	at org.eclipse.persistence.internal.expressions.QueryKeyExpression.getFieldValue(QueryKeyExpression.java:442)
+	at org.eclipse.persistence.internal.expressions.ConstantExpression.printSQL(ConstantExpression.java:194)
+	at org.eclipse.persistence.expressions.ExpressionOperator.printDuo(ExpressionOperator.java:2421)
+	at org.eclipse.persistence.internal.expressions.CompoundExpression.printSQL(CompoundExpression.java:307)
+	at org.eclipse.persistence.internal.expressions.RelationExpression.printSQL(RelationExpression.java:922)
+	at org.eclipse.persistence.expressions.ExpressionOperator.printDuo(ExpressionOperator.java:2416)
+	at org.eclipse.persistence.internal.expressions.CompoundExpression.printSQL(CompoundExpression.java:307)
+	at org.eclipse.persistence.internal.expressions.ExpressionSQLPrinter.translateExpression(ExpressionSQLPrinter.java:337)
+	at org.eclipse.persistence.internal.expressions.ExpressionSQLPrinter.printExpression(ExpressionSQLPrinter.java:135)
+	at org.eclipse.persistence.internal.expressions.SQLSelectStatement.printSQLWhereClause(SQLSelectStatement.java:1803)
+	at org.eclipse.persistence.internal.expressions.SQLSelectStatement.printSQL(SQLSelectStatement.java:1752)
+	at org.eclipse.persistence.internal.expressions.SubSelectExpression.printSQL(SubSelectExpression.java:278)
+	at org.eclipse.persistence.expressions.ExpressionOperator.printCollection(ExpressionOperator.java:2374)
+	at org.eclipse.persistence.internal.expressions.FunctionExpression.printSQL(FunctionExpression.java:581)
+	at org.eclipse.persistence.expressions.ExpressionOperator.printDuo(ExpressionOperator.java:2421)
+	at org.eclipse.persistence.internal.expressions.CompoundExpression.printSQL(CompoundExpression.java:307)
+	at org.eclipse.persistence.internal.expressions.ExpressionSQLPrinter.translateExpression(ExpressionSQLPrinter.java:337)
+	at org.eclipse.persistence.internal.expressions.ExpressionSQLPrinter.printExpression(ExpressionSQLPrinter.java:135)
+	at org.eclipse.persistence.internal.expressions.SQLSelectStatement.printSQLWhereClause(SQLSelectStatement.java:1803)
+	at org.eclipse.persistence.internal.expressions.SQLSelectStatement.printSQL(SQLSelectStatement.java:1752)
+	at org.eclipse.persistence.internal.databaseaccess.DatabasePlatform.printSQLSelectStatement(DatabasePlatform.java:3568)
+	at org.eclipse.persistence.platform.database.HSQLPlatform.printSQLSelectStatement(HSQLPlatform.java:340)
+	at org.eclipse.persistence.internal.expressions.SQLSelectStatement.buildCall(SQLSelectStatement.java:868)
+	at org.eclipse.persistence.internal.expressions.SQLSelectStatement.buildCall(SQLSelectStatement.java:879)
+	at org.eclipse.persistence.descriptors.ClassDescriptor.buildCallFromStatement(ClassDescriptor.java:876)
+	at org.eclipse.persistence.internal.queries.StatementQueryMechanism.setCallFromStatement(StatementQueryMechanism.java:433)
+	at org.eclipse.persistence.internal.queries.StatementQueryMechanism.prepareSelectAllRows(StatementQueryMechanism.java:355)
+	at org.eclipse.persistence.internal.queries.ExpressionQueryMechanism.prepareSelectAllRows(ExpressionQueryMechanism.java:1787)
+	at org.eclipse.persistence.queries.ReadAllQuery.prepareSelectAllRows(ReadAllQuery.java:910)
+	at org.eclipse.persistence.queries.ReadAllQuery.prepare(ReadAllQuery.java:841)
+	at org.eclipse.persistence.queries.DatabaseQuery.checkPrepare(DatabaseQuery.java:675)
+	... 33 more
+

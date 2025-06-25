@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="jakarta.persistence.OneToMany"/>
+    <fullyQualifiedTypeName name="jakarta.persistence.ManyToOne"/>
+    <fullyQualifiedTypeName name="uo.ri.cws.domain.Invoice"/>
+    <fullyQualifiedTypeName name="uo.ri.cws.domain.Associations.Settle"/>
+    <fullyQualifiedTypeName name="uo.ri.cws.domain.base.BaseEntity"/>
+    <fullyQualifiedTypeName name="java.lang.IllegalStateException"/>
+    <fullyQualifiedTypeName name="uo.ri.cws.domain.WorkOrder.WorkOrderState"/>
+    <fullyQualifiedTypeName name="uo.ri.cws.domain.Associations.Assign"/>
+    <fullyQualifiedTypeName name="uo.ri.cws.domain.Intervention"/>
+    <fullyQualifiedTypeName name="java.lang.classfile.instruction.ReturnInstruction"/>
+    <fullyQualifiedTypeName name="java.lang.Math"/>
+    <fullyQualifiedTypeName name="java.time.LocalDate"/>
+    <fullyQualifiedTypeName name="uo.ri.util.math.Round"/>
+    <fullyQualifiedTypeName name="uo.ri.cws.domain.PaymentMean"/>
+    <fullyQualifiedTypeName name="uo.ri.util.assertion.ArgumentChecks"/>
+    <fullyQualifiedTypeName name="uo.ri.cws.domain.Voucher"/>
+    <fullyQualifiedTypeName name="uo.ri.cws.domain.WorkOrder"/>
+    <fullyQualifiedTypeName name="uo.ri.cws.domain.Associations"/>
+    <fullyQualifiedTypeName name="uo.ri.cws.domain.Associations.Bill"/>
+    <fullyQualifiedTypeName name="uo.ri.cws.domain.Invoice.InvoiceState"/>
+    <fullyQualifiedTypeName name="uo.ri.util.assertion.StateChecks"/>
+    <fullyQualifiedTypeName name="uo.ri.cws.domain.Charge"/>
+    <fullyQualifiedTypeName name="uo.ri.cws.domain.Supply"/>
+    <fullyQualifiedTypeName name="uo.ri.cws.application.service.invoice.create.DtoAssembler"/>
+    <fullyQualifiedTypeName name="uo.ri.cws.application.service.mechanic.MechanicCrudService.MechanicDto"/>
+    <fullyQualifiedTypeName name="uo.ri.cws.application.service.mechanic.crud.command.FindMechanicsWith1WorkOrder"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="uo.ri.cws.domain.Mechanic"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+</qualifiedTypeNameHistroy>

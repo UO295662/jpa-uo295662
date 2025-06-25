@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="https://jakarta.ee/xml/ns/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence/orm https://jakarta.ee/xml/ns/persistence/orm/orm_3_1.xsd"
+	version="3.1">
+
+	<!-- Vehicle queries -->
+	<named-query name="Vehicle.findByPlate">
+		<query>select v from Vehicle v where v.plateNumber = ?1</query>
+	</named-query>
+
+	<!-- Order queries -->
+	<named-query name="Order.findBySparePartCode">
+		<query> SELECT o 
+				FROM Order o 
+				JOIN o.orderLines ol 
+				where ol.sparePart.code = ?1 
+		</query>
+	</named-query>
+	<named-query name="Order.findByProviderNif">
+		<query>
+			select o
+			from Order o
+			join Provider p on p.id = o.provider.id
+			where o.provider.nif = ?1
+		</query>
+	</named-query>
+	<named-query name="Order.findByCode">
+		<query>
+			select o
+			from Order o
+			where o.code = ?1
+		</query>
+	</named-query>
+
+	<!-- Provider queries -->
+	<named-query name="Provider.findByName">
+		<query>
+			select p
+			from Provider p
+			where p.name = ?1
+		</query>
+	</named-query>
+	<named-query name="Provider.findByNameMailPhone">
+		<query>
+			select p
+			from Provider p
+			where p.name = ?1
+			and p.email = ?2
+			and p.phone = ?3
+		</query>
+	</named-query>
+	<named-query name="Provider.findByNif">
+		<query>
+			select p
+			from Provider p
+			where p.nif = ?1
+		</query>
+	</named-query>
+	<named-query name="Provider.findBySparePartCode">
+		<query>
+        	select p
+        	from Provider p
+        	join p.supplies s
+        	where s.sparePart.code = ?1
+    	</query>
+	</named-query>
+
+
+	<!-- WorkOrder queries -->
+	<named-query name="WorkOrder.findByIds">
+		<query>select w from WorkOrder w where w.id in ?1</query>
+	</named-query>
+	<named-query name="WorkOrder.findNotInvoicedWorkOrdersByClientNif">
+		<query>
+			select w
+			from WorkOrder w
+			join Vehicle v on w.vehicle.id = v.id
+			join Client c on v.client.id = c.id
+			where c.nif like ?1
+			and w.state = uo.ri.cws.domain.WorkOrder.WorkOrderState.FINISHED
+		</query>
+	</named-query>
+
+	<!-- PaymentMean queries -->
+	<named-query name="PaymentMean.findByInvoiceId">
+		<query>
+			select m
+			from Invoice f
+			join f.workOrders w
+			join w.vehicle.client c
+			join c.paymentMeans m
+			where f.id = ?1
+		</query>
+	</named-query>
+
+	<!-- Mechanic queries -->
+	<named-query name="Mechanic.findByNif">
+		<query>
+			select m
+			from Mechanic m
+			where m.nif = ?1
+		</query>
+	</named-query>
+	<named-query name="Mechanic.findAll">
+		<query>
+			select m
+			from Mechanic m
+		</query>
+	</named-query>
+
+	<!-- Supply queries -->
+	<named-query name="Supply.findByNifAndCode">
+		<query>
+			select s
+			from Supply s
+			join s.provider p
+			join s.sparePart sp
+			where p.nif = ?1 and sp.code = ?2
+		</query>
+	</named-query>
+	<named-query name="Supply.findByProviderNif">
+		<query>
+			select s
+			from Supply s
+			join s.provider p
+			where p.nif = ?1
+		</query>
+	</named-query>
+	<named-query name="Supply.findBySparePartCode">
+		<query>
+			select s
+			from Supply s
+			join SparePart sp
+			where s.sparePart.code = ?1
+		</query>
+	</named-query>
+
+	<!-- Invoice queries -->
+	<named-query name="Invoice.findByNumber">
+		<query>select f from Invoice f where f.number = ?1</query>
+	</named-query>
+
+
+	<named-query name="Invoice.getNextInvoiceNumber">
+		<!-- 	
+		This breaks if there is none invoice
+		<query>select max(f.number) + 1 from Invoice f</query>
+-->
+		<query>
+			select cast( coalesce(max(f.number) + 1, 1L) as bigint )
+			from Invoice f
+		</query>
+	</named-query>
+	<!-- SpareParts queries -->
+	<named-query name="SparePart.findByCode">
+    	<query>
+        	select sp from SparePart sp where sp.code = ?1
+    	</query>
+	</named-query>
+	<named-query name="SparePart.findByDescription">
+    	<query>
+        	<![CDATA[
+        	SELECT sp
+        	FROM SparePart sp
+        	LEFT JOIN sp.substitutions ts
+        	WHERE sp.description = ?1
+        	]]>
+    	</query>
+	</named-query>
+	<named-query name="SparePart.findUnderStock">
+    	<query>
+        	<![CDATA[
+        	SELECT sp
+	        FROM SparePart sp
+	        WHERE sp.stock < sp.minStock
+        	]]>
+   	 	</query>
+	</named-query>
+	<named-query name="SparePart.findUnderStockNotPending">
+    	<query>
+        <![CDATA[
+        SELECT sp
+        FROM SparePart sp
+        WHERE sp.stock < sp.minStock
+        AND sp.code NOT IN (
+            SELECT DISTINCT ol.sparePart.code
+            FROM Order o
+            JOIN o.orderLines ol
+            WHERE o.state =  AND o.state = uo.ri.cws.domain.Order$Status.PENDING
+        )
+        ]]>
+    	</query>
+	</named-query>
+	<named-query name="SparePart.findOverStock">
+    	<query>
+        	<![CDATA[
+        	SELECT sp
+	        FROM SparePart sp
+	        WHERE sp.stock > sp.maxStock
+        	]]>
+   	 	</query>
+	</named-query>
+	<!-- 
+	Use this format if your query has "greater than" (&gt;) numeric comparisons as 
+	the one in this example
+	
+	<named-query name="findItemsOnSaleByCategoryId">
+	<query>
+			<![CDATA[
+			select i 
+			from Item i join i.categories c
+			where c.id = ?2
+				and i.startDate <= ?1
+				and i.endDate >= ?1 
+			]]>
+	</query>
+	</named-query>
+ -->
+
+</entity-mappings>

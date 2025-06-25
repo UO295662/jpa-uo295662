@@ -1,0 +1,30 @@
+package uo.ri.cws.infrastructure.persistence.jpa.repository;
+
+import java.util.List;
+import java.util.Optional;
+
+import jakarta.persistence.TypedQuery;
+import uo.ri.cws.application.repository.MechanicRepository;
+import uo.ri.cws.domain.Mechanic;
+import uo.ri.cws.infrastructure.persistence.jpa.util.BaseJpaRepository;
+import uo.ri.cws.infrastructure.persistence.jpa.util.Jpa;
+
+public class MechanicJpaRepository extends BaseJpaRepository<Mechanic>
+    implements MechanicRepository {
+
+    @Override
+    public Optional<Mechanic> findByNif(String nif) {
+        TypedQuery<Mechanic> q = Jpa.getManager()
+            .createNamedQuery("Mechanic.findByNif", Mechanic.class);
+        q.setParameter(1, nif);
+        return q.getResultStream().findFirst();
+    }
+
+    @Override
+    public List<Mechanic> findWith1WorkOrder() {
+        TypedQuery<Mechanic> q = Jpa.getManager()
+            .createNamedQuery("Mechanic.findWith1WorkOrder", Mechanic.class);
+        return q.getResultList();
+    }
+
+}

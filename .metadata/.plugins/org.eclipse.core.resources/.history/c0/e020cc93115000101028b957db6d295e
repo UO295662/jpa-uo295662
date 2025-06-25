@@ -1,0 +1,99 @@
+package uo.ri.cws.application.service.spare.provider.crud;
+
+import java.util.Optional;
+
+import uo.ri.conf.Factories;
+import uo.ri.cws.application.repository.ProviderRepository;
+import uo.ri.cws.application.service.spare.ProvidersCrudService.ProviderDto;
+import uo.ri.cws.application.util.command.Command;
+import uo.ri.cws.domain.Provider;
+import uo.ri.util.assertion.ArgumentChecks;
+import uo.ri.util.exception.BusinessChecks;
+import uo.ri.util.exception.BusinessException;
+
+public class UpdateProvider implements Command<Void> {
+
+    private ProviderRepository proRep = Factories.repository.forProvider();
+
+    private ProviderDto dto;
+
+    /**
+     * Updates all the field for the provider except the id, nif and version. Id
+     * and nif will signal the provider to update and version will be internally
+     * updated after committing.
+     * 
+     * @param dto
+     * @throws BusinessException        in case of: - it does not exist any
+     *                                  provider with the nif - there already
+     *                                  exist another provider with different
+     *                                  nif but same name, email and phone once
+     *                                  the provided be updated - the version
+     *                                  field of the incoming dto does not match
+     *                                  the version of the persistent entity
+     * @throws IllegalArgumentException in case of: - the dto is null - any of
+     *                                  the four fields are null or empty - the
+     *                                  email field does not, at least, contains
+     *                                  an @ sign
+     */
+    public UpdateProvider(ProviderDto dto) {
+    	 ArgumentChecks.isNotNull(dto, "Null dto");
+         ArgumentChecks.isNotNull(dto.nif, "Null nif");
+         ArgumentChecks.isNotNull(dto.phone, "Null phone");
+         ArgumentChecks.isNotNull(dto.email, "Null email");
+         ArgumentChecks.isNotNull(dto.name, "Null name");
+         ArgumentChecks.isNotBlank(dto.name, "Invalid name");
+         ArgumentChecks.isNotBlank(dto.phone, "Invalid phone");
+         ArgumentChecks.isNotBlank(dto.email, "Invalid email");
+         ArgumentChecks.isNotBlank(dto.nif, "Invalid nif");
+         ArgumentChecks.isTrue(dto.email.contains("@"),
+             "Invalid email: must contain '@'");
+         this.dto = dto;
+    }
+
+    /*
+     * - it does not exist any provider with the nif - there already exist
+     * another provider with different nif but same name, email and phone once
+     * the provided be updated - the version field of the incoming dto does not
+     * match the version of the persistent entity
+     */
+    @Override
+    public Void execute() throws BusinessException {
+        Optional<Provider> op = proRep.findByNif(dto.nif);
+        checks(op);
+        Provider provider = op.get();
+        provider.setName(dto.name);
+        provider.setEmail(dto.email);
+        provider.setPhone(dto.phone);
+
+        return null;
+    }
+
+    private void checks(Optional<Provider> op)
+        throws BusinessException {
+        BusinessChecks.exists(op, "Provider doesnt exists");
+        BusinessChecks.hasVersion(op.get().getVersion(), dto.version);
+        checkSameNameEmailPhoneDifferentNif();
+    }
+
+    private void checkSameNameEmailPhoneDifferentNif()
+        throws BusinessException {
+        for (Provider pr : proRep.findByName(dto.name)) {
+            String email = pr.getEmail();
+            String nif = pr.getNif();
+            String telefono = pr.getPhone();
+            String name = pr.getName();
+
+            boolean telefonoValido = telefono.equals(dto.phone);
+            boolean emailValido = email.equals(dto.email);
+            boolean nifValido = !nif.equals(dto.nif);
+            boolean nameValido = name.equals(dto.name);
+
+            BusinessChecks.isFalse(
+            		telefonoValido && emailValido && nifValido
+                    && nameValido,
+                "Existing provider with the name, phone, email and distinct nif");
+        }
+    }
+
+
+}
